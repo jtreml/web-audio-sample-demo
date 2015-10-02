@@ -1,0 +1,53 @@
+<dom-module id="note-button">
+    <template>
+        <style>
+            :host {
+                display: inline-block;
+            }
+            div {
+                width: 48px;
+                height: 48px;
+                margin-right: 4px;
+                display: inline-block;
+                box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.4);
+                border-radius: 4px;
+                transition: transform 100ms;
+            }
+            div:active {
+                transform: scale(0.95);
+            }
+            div.on {
+                background: #fff9a7;
+            }
+
+            :host(.active) div {
+                background: #ff4226;
+            }
+            :host(.active) div.on {
+                background: #fdaa68;
+            }
+        </style>
+        <div on-tap="_toggleNote" id="note"></div>
+    </template>
+    <script>
+
+        Polymer({
+            is: 'note-button',
+            properties: {
+                note: {
+                    type: Number,
+                    observer: '_noteChanged'
+                }
+            },
+            ready: function() {
+                this._noteChanged();
+            },
+            _noteChanged: function() {
+                this.toggleClass('on', this.note > 0, this.$.note);
+            },
+            _toggleNote: function(e) {
+                this.fire('toggle-note');
+            },
+        });
+    </script>
+</dom-module>

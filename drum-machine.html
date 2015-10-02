@@ -1,0 +1,157 @@
+<link rel="import" href="note-button.html" />
+<dom-module id="drum-machine">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+            .track {
+                margin-top: 20px;
+            }
+            .note {
+                display: inline-block;
+                background: #eee;
+                border: 2px solid red;
+                width: 32px;
+                height: 32px;
+                line-height: 32px;
+                text-align: center;
+            }
+            .track img {
+                height: 40px;
+            }
+            .title img {
+                height: 70px;
+                width: 392px;
+            }
+            .title {
+                text-align: center;
+            }
+            .label {
+                width: 150px;
+                float: left;
+                text-align: right;
+                margin-right: 20px;
+            }
+        </style>
+        <div class="title">
+            <img src="img/drum-machina.png" alt="Drum Machina" />
+        </div>
+        <template is="dom-repeat" items="[[tracks]]">
+            <div class="track" id$="[[item.id]]">
+                <web-audio-sample src$="[[item.sample]]"></web-audio-sample>
+
+                <div class="label">
+                    <img src="[[_getTrackLabelImage(item.id)]]" />
+                </div>
+                <template is="dom-repeat" items="[[item.notes]]">
+                    <note-button data-index$="[[index]]" note$="[[item]]"></note-button>
+                </template>
+            </div>
+        </template>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'drum-machine',
+
+            properties: {
+                tracks: {
+                    type: Array,
+                    notify: true,
+                    value: [
+                        {
+                            "id": "kick",
+                            "sample": "sounds/BT7AADA.WAV",
+                            "notes": [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]
+                        },
+                        {
+                            "id": "snare",
+                            "sample": "sounds/ST7T0SA.WAV",
+                            "notes": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+                        },
+                        {
+                            "id": "clap",
+                            "sample": "sounds/HANDCLP1.WAV",
+                            "notes": [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0]
+                        },
+                        {
+                            "id": "closed-hihat",
+                            "sample": "sounds/HHCD0.WAV",
+                            "notes": [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+                        },
+                        {
+                            "id": "open-hihat",
+                            "sample": "sounds/HHOD4.WAV",
+                            "notes": [0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0]
+                        },
+                        {
+                            "id": "crash",
+                            "sample": "sounds/CSHD6.WAV",
+                            "notes": [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                        }
+                    ]
+                }
+            },
+
+            listeners: {
+                'toggle-note': '_handleToggleNote'
+            },
+
+            _handleToggleNote: function(e) {
+                var trackId = e.target.parentElement.id;
+                var noteIndex = e.target.getAttribute('data-index');
+                console.log(trackId, noteIndex);
+
+                var track = this.tracks.filter(function(track) {
+                    return track.id === trackId;
+                });
+                if (track.length === 1) {
+                    // Works, but ugly
+                    // Copy the array to make Polymer notice the change.
+                    // Two levels of array changes not supported?
+                    var notes = JSON.parse(JSON.stringify(track[0].notes));
+                    notes[noteIndex] = (track[0].notes[noteIndex] ? 0 : 1);
+                    this.set('tracks.' + this.tracks.indexOf(track[0]) + '.notes', notes);
+                }
+            },
+
+            _getTrackLabelImage: function(trackId) {
+                return 'img/' + trackId + '.png';
+            },
+
+            ready: function() {
+                var playHead = -1;
+                var tracks = this.tracks;
+
+                window.setInterval(function() {
+                    tracks.forEach(function(track, i) {
+                        var activeNote = Polymer.dom(this.root).querySelector('#' + track.id + ' note-button.active');
+                        if (activeNote) {
+                            activeNote.classList.remove('active');
+                        }
+                    }.bind(this));
+
+                    playHead++;
+                    if (playHead == 16) {
+                        playHead = 0;
+                    }
+                    tracks.forEach(function(track, i) {
+                        var notes = track.notes;
+                        var note = notes[playHead];
+
+                        var noteButton = Polymer.dom(this.root).querySelector('#' + track.id + ' note-button:nth-of-type(' + (playHead + 1) + ')');
+                        if (noteButton) {
+                            noteButton.classList.add('active');
+                        }
+                        if (note !== 0) {
+                            var sample = Polymer.dom(this.root).querySelector('#' + track.id + ' web-audio-sample');
+                            sample.playbackRate = note;
+                            sample.play();
+                        }
+                    }.bind(this));
+                }.bind(this), 140);
+            }
+        });
+    </script>
+</dom-module>
