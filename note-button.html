@@ -26,17 +26,29 @@
             :host(.active) div.on {
                 background: #fdaa68;
             }
+            input {
+                width: 48px;
+                height: 48px;
+                position: absolute;
+                font-size: 20px;
+                text-align: center;
+            }
         </style>
-        <div on-tap="_toggleNote" id="note"></div>
+        <div on-tap="_toggleNote" id="note">
+            <input id="expertInput" type="text" hidden$="{{!expertMode}}" value="{{note::change}}" />
+        </div>
     </template>
     <script>
-
         Polymer({
             is: 'note-button',
             properties: {
                 note: {
                     type: Number,
                     observer: '_noteChanged'
+                },
+                expertMode: {
+                    type: Boolean,
+                    value: false
                 }
             },
             ready: function() {
@@ -44,9 +56,12 @@
             },
             _noteChanged: function() {
                 this.toggleClass('on', this.note > 0, this.$.note);
+                this.fire('toggle-note', { value: this.note, noteElement: this });
             },
             _toggleNote: function(e) {
-                this.fire('toggle-note');
+                if (!this.expertMode) {
+                    this.note = (this.note === 0 ? 1 : 0);
+                }
             },
         });
     </script>

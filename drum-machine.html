@@ -38,12 +38,16 @@
                 text-align: right;
                 margin-right: 20px;
             }
-            #clear {
+            #clear,
+            #expert {
                 cursor: pointer;
                 position: absolute;
                 top: 16px;
                 right: 8px;
                 fill: #ff4226;
+            }
+            #expert {
+                right: 38px;
             }
             paper-tooltip {
                 margin-top: -8px;
@@ -56,6 +60,9 @@
             <img src="img/drum-machina.png" alt="Drum Machina" />
             <iron-icon icon="clear" id="clear" on-tap="_clearTracks"></iron-icon>
             <paper-tooltip for="clear"><span>Clear</span></paper-tooltip>
+
+            <iron-icon icon="create" id="expert" on-tap="_toggleExpertMode"></iron-icon>
+            <paper-tooltip for="expert"><span>Expert Mode</span></paper-tooltip>
         </div>
         <template is="dom-repeat" items="[[tracks]]">
             <div class="track" id$="[[item.id]]">
@@ -65,7 +72,7 @@
                     <img src="[[_getTrackLabelImage(item.id)]]" />
                 </div>
                 <template is="dom-repeat" items="[[item.notes]]">
-                    <note-button data-index$="[[index]]" note$="[[item]]"></note-button>
+                    <note-button expert-mode="[[expertMode]]" data-index$="[[index]]" note$="[[item]]"></note-button>
                 </template>
             </div>
         </template>
@@ -76,6 +83,7 @@
             is: 'drum-machine',
 
             properties: {
+                expertMode: Boolean,
                 tracks: {
                     type: Array,
                     notify: true,
@@ -124,7 +132,12 @@
                 }.bind(this));
             },
 
+            _toggleExpertMode: function() {
+                this.expertMode = !this.expertMode;
+            },
+
             _handleToggleNote: function(e) {
+                var noteValue = e.detail.value;
                 var trackId = e.target.parentElement.id;
                 var noteIndex = e.target.getAttribute('data-index');
 
@@ -136,7 +149,7 @@
                     // Copy the array to make Polymer notice the change.
                     // Two levels of array changes not supported?
                     var notes = JSON.parse(JSON.stringify(track[0].notes));
-                    notes[noteIndex] = (track[0].notes[noteIndex] ? 0 : 1);
+                    notes[noteIndex] = noteValue;
                     this.set('tracks.' + this.tracks.indexOf(track[0]) + '.notes', notes);
                 }
             },
