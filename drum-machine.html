@@ -119,7 +119,6 @@
             },
 
             _clearTracks: function() {
-                console.log('clear');
                 this.tracks.forEach(function(track, index) {
                     this.set('tracks.' + this.tracks.indexOf(track) + '.notes', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
                 }.bind(this));
@@ -128,7 +127,6 @@
             _handleToggleNote: function(e) {
                 var trackId = e.target.parentElement.id;
                 var noteIndex = e.target.getAttribute('data-index');
-                console.log(trackId, noteIndex);
 
                 var track = this.tracks.filter(function(track) {
                     return track.id === trackId;
