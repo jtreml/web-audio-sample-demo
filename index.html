@@ -5,11 +5,15 @@
         <title>Drum Machina</title>
 
         <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+        <link rel="import" href="bower_components/paper-styles/paper-styles.html" />
         <link rel="import" href="bower_components/web-audio-sample/web-audio-sample.html" />
         <link rel="import" href="bower_components/iron-flex-layout/classes/iron-flex-layout.html" />
         <link rel="import" href="drum-machine.html" />
 
-        <style>
+        <style is="custom-style">
+            body {
+                @apply(--paper-font-common-base);
+            }
             .layout {
                 width: 100;
                 height: 100%;

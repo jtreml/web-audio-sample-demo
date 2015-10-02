@@ -15,6 +15,9 @@
   "private": true,
   "dependencies": {
     "iron-flex-layout": "polymerelements/iron-flex-layout#~1.0.3",
-    "web-audio-sample": "~0.1.0"
+    "web-audio-sample": "~0.1.0",
+    "iron-icon": "polymerelements/iron-icon#~1.0.5",
+    "iron-icons": "polymerelements/iron-icons#~1.0.4",
+    "paper-tooltip": "polymerelements/paper-tooltip#~1.1.0"
   }
 }
