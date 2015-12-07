@@ -1,7 +1,8 @@
 <link rel="import" href="note-button.html" />
-<link rel="import" href="bower_components/iron-icon/iron-icon.html" />
-<link rel="import" href="bower_components/iron-icons/iron-icons.html" />
-<link rel="import" href="bower_components/paper-tooltip/paper-tooltip.html" />
+<link rel="import" href="../iron-icon/iron-icon.html" />
+<link rel="import" href="../iron-icons/iron-icons.html" />
+<link rel="import" href="../paper-tooltip/paper-tooltip.html" />
+<link rel="import" href="../web-audio-sample/web-audio-sample.html" />
 <dom-module id="drum-machine">
     <template>
         <style>
@@ -57,7 +58,7 @@
             }
         </style>
         <div class="title">
-            <img src="img/drum-machina.png" alt="Drum Machina" />
+            <img src="[[resolveUrl('img/drum-machina.png')]]" alt="Drum Machina" />
             <iron-icon icon="clear" id="clear" on-tap="_clearTracks"></iron-icon>
             <paper-tooltip for="clear"><span>Clear</span></paper-tooltip>
 
@@ -66,7 +67,7 @@
         </div>
         <template is="dom-repeat" items="[[tracks]]">
             <div class="track" id$="[[item.id]]">
-                <web-audio-sample src$="[[item.sample]]"></web-audio-sample>
+                <web-audio-sample src$="[[resolveUrl(item.sample)]]"></web-audio-sample>
 
                 <div class="label">
                     <img src="[[_getTrackLabelImage(item.id)]]" />
@@ -155,7 +156,7 @@
             },
 
             _getTrackLabelImage: function(trackId) {
-                return 'img/' + trackId + '.png';
+                return this.resolveUrl('img/' + trackId + '.png');
             },
 
             ready: function() {
