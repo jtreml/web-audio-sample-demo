@@ -1,60 +1,32 @@
 <link rel="import" href="note-button.html" />
+<link rel="import" href="../iron-flex-layout/classes/iron-flex-layout.html">
 <link rel="import" href="../iron-icon/iron-icon.html" />
 <link rel="import" href="../iron-icons/iron-icons.html" />
 <link rel="import" href="../paper-tooltip/paper-tooltip.html" />
 <link rel="import" href="../web-audio-sample/web-audio-sample.html" />
 <dom-module id="drum-machine">
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
     <template>
         <style>
             :host {
                 display: block;
+                @apply(--layout-vertical);
             }
-            .track {
-                margin-top: 20px;
-                white-space: nowrap;
-            }
-            .note {
-                display: inline-block;
-                background: #eee;
-                border: 2px solid red;
-                width: 32px;
-                height: 32px;
-                line-height: 32px;
-                text-align: center;
-            }
-            .track img {
-                height: 40px;
-            }
-            .title img {
-                height: 70px;
-                width: 392px;
-            }
-            .title {
-                text-align: center;
+
+            paper-material {
+                width: 110px;
+                height: 36px;
                 position: relative;
-            }
-            .label {
-                width: 150px;
-                float: left;
-                text-align: right;
-                margin-right: 20px;
-            }
-            #clear,
-            #expert {
-                cursor: pointer;
-                position: absolute;
-                top: 16px;
-                right: 8px;
-                fill: #ff4226;
-            }
-            #expert {
-                right: 38px;
-            }
-            paper-tooltip {
-                margin-top: -8px;
-            }
-            paper-tooltip span {
-                font-size: 120%;
+                margin: 24px 6px 0 6px;
+                text-align: left;
+                line-height: 36px;
+                padding: 0 6px 0 6px;
+                background-color: #eeeeee;
             }
         </style>
         <div class="title">
@@ -66,14 +38,12 @@
             <paper-tooltip for="expert"><span>Expert Mode</span></paper-tooltip>
         </div>
         <template is="dom-repeat" items="[[tracks]]">
-            <div class="track" id$="[[item.id]]">
+            <div class="track layout horizontal flex" id$="[[item.id]]" style="position: relative;">
                 <web-audio-sample src$="[[resolveUrl(item.sample)]]"></web-audio-sample>
 
-                <div class="label">
-                    <img src="[[_getTrackLabelImage(item.id)]]" />
-                </div>
+                <paper-material elevation="1">[[item.id]]</paper-material>
                 <template is="dom-repeat" items="[[item.notes]]">
-                    <note-button expert-mode="[[expertMode]]" data-index$="[[index]]" note$="[[item]]"></note-button>
+                    <note-button expert-mode="[[expertMode]]" data-index$="[[index]]" note$="[[item]]" class="flex" style="height: 36px; position: relative; margin: 24px 6px 0 6px;"></note-button>
                 </template>
             </div>
         </template>
@@ -153,10 +123,6 @@
                     notes[noteIndex] = noteValue;
                     this.set('tracks.' + this.tracks.indexOf(track[0]) + '.notes', notes);
                 }
-            },
-
-            _getTrackLabelImage: function(trackId) {
-                return this.resolveUrl('img/' + trackId + '.png');
             },
 
             ready: function() {

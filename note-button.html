@@ -1,43 +1,43 @@
+<link rel="import" href="../paper-button/paper-button.html" />
+
 <dom-module id="note-button">
     <template>
+
         <style>
             :host {
                 display: inline-block;
             }
-            div {
-                width: 48px;
-                height: 48px;
-                margin-right: 4px;
-                display: inline-block;
-                box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.4);
-                border-radius: 4px;
+            paper-button {
+                min-width: 0;
+                min-height: 0;
                 transition: transform 100ms;
             }
-            div:active {
-                transform: scale(0.95);
-            }
-            div.on {
+            paper-button.on {
                 background: #fff9a7;
             }
 
-            :host(.active) div {
+            :host(.active) paper-button {
                 background: #ff4226;
             }
-            :host(.active) div.on {
+            :host(.active) paper-button.on {
                 background: #fdaa68;
             }
+
             input {
-                width: 48px;
-                height: 48px;
-                position: absolute;
+                width: 100%;
+                margin: 0px;
+                border: 0;
+                background: transparent;
                 font-size: 20px;
                 text-align: center;
             }
         </style>
-        <div on-tap="_toggleNote" id="note">
-            <input id="expertInput" type="text" hidden$="{{!expertMode}}" value="{{note::change}}" />
-        </div>
+
+        <paper-button raised on-tap="_toggleNote" id="note" class="fit">
+            <input id="expertInput" type="text" hidden$="{{!expertMode}}" value="{{note::change}}" class="fit" />
+        </paper-button>
     </template>
+
     <script>
         Polymer({
             is: 'note-button',
