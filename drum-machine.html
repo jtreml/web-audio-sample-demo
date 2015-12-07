@@ -83,6 +83,10 @@
                             "notes": [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                         }
                     ]
+                },
+                play: {
+                    type: Boolean,
+                    value: false
                 }
             },
 
@@ -117,8 +121,10 @@
             ready: function() {
                 var playHead = -1;
                 var tracks = this.tracks;
-
                 window.setInterval(function() {
+                    if(!this.play) {
+                        return;
+                    }
                     tracks.forEach(function(track, i) {
                         var activeNote = Polymer.dom(this.root).querySelector('#' + track.id + ' note-button.active');
                         if (activeNote) {
