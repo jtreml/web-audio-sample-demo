@@ -29,14 +29,7 @@
                 background-color: #eeeeee;
             }
         </style>
-        <div class="title">
-            <img src="[[resolveUrl('img/drum-machina.png')]]" alt="Drum Machina" />
-            <iron-icon icon="clear" id="clear" on-tap="_clearTracks"></iron-icon>
-            <paper-tooltip for="clear"><span>Clear</span></paper-tooltip>
 
-            <iron-icon icon="create" id="expert" on-tap="_toggleExpertMode"></iron-icon>
-            <paper-tooltip for="expert"><span>Expert Mode</span></paper-tooltip>
-        </div>
         <template is="dom-repeat" items="[[tracks]]">
             <div class="track layout horizontal flex" id$="[[item.id]]" style="position: relative;">
                 <web-audio-sample src$="[[resolveUrl(item.sample)]]"></web-audio-sample>
@@ -97,14 +90,10 @@
                 'toggle-note': '_handleToggleNote'
             },
 
-            _clearTracks: function() {
+            clearTracks: function() {
                 this.tracks.forEach(function(track, index) {
                     this.set('tracks.' + this.tracks.indexOf(track) + '.notes', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
                 }.bind(this));
-            },
-
-            _toggleExpertMode: function() {
-                this.expertMode = !this.expertMode;
             },
 
             _handleToggleNote: function(e) {
