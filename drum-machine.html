@@ -136,6 +136,7 @@
                     if (playHead == 16) {
                         playHead = 0;
                     }
+                    var played = [];
                     tracks.forEach(function(track, i) {
                         var notes = track.notes;
                         var note = notes[playHead];
@@ -148,8 +149,15 @@
                             var sample = Polymer.dom(this.root).querySelector('#' + track.id + ' web-audio-sample');
                             sample.playbackRate = note;
                             sample.play();
+                            played.push({
+                                index: i,
+                                rate: note
+                            })
                         }
                     }.bind(this));
+                    if(played.length > 0) {
+                        this.fire('play', played);
+                    }
                 }.bind(this), 140);
             }
         });
