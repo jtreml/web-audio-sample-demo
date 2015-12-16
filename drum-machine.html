@@ -182,9 +182,9 @@
 
                 var _this = this;
                 this.async(function() {
-                    this.tracks.forEach((track, i) => {
+                    this.tracks.forEach(function(track, i) {
                         var el = Polymer.dom(_this.root).querySelector('#custom-' + i);
-                        this.renderer(el, i);
+                        _this.renderer(el, i);
                     })
                 })
             }
